@@ -227,6 +227,8 @@ func (actionHandler *ActionHandler) runCommand(ctx context.Context, sessionObj *
 		return actionHandler.updateRegistryScanCronJob(ctx, sessionObj)
 	case apis.TypeDeleteRegistryScanCronJob:
 		return actionHandler.deleteRegistryScanCronJob(ctx)
+	case apis.TypeCleanCacheData:
+		return actionHandler.cleanCacheData(ctx)
 	default:
 		logger.L().Ctx(ctx).Error(fmt.Sprintf("Command %s not found", c.CommandName))
 	}

@@ -239,3 +239,8 @@ func (actionHandler *ActionHandler) deleteRegistryScanCronJob(ctx context.Contex
 
 	return nil
 }
+
+func (actionHandler *ActionHandler) cleanCacheData(ctx context.Context) error {
+
+	return nil
+}

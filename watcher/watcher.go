@@ -41,6 +41,38 @@ func NewWatchHandler() *WatchHandler {
 	}
 }
 
+func (wh *WatchHandler) CleanCacheData() error {
+	// list all wls and imageIDs from k8s api
+	podsList, err := wh.k8sAPI.ListPods("", map[string]string{})
+	if err != nil {
+		return err
+	}
+	activeWlidsMap := make(map[string]bool)
+	activeImagesMap := make(map[string]bool)
+	for _, pod := range podsList.Items {
+		parentWlid, err := wh.getParentIDForPod(&pod)
+		if err != nil {
+			continue
+		}
+		activeWlidsMap[parentWlid] = true
+
+		for _, containerStatus := range pod.Status.ContainerStatuses {
+			activeImagesMap[ExtractImageID(containerStatus.ImageID)] = true
+		}
+	}
+
+	// list all instanceIDs and imageIDs from storage
+
+	// get all unused instanceIDs and imageIDs
+
+	// send delete list of imageIDs and instanceIDs to storage
+
+	// for each deleted instanceID, delete SBOM`
+
+	// for each deleted imageID, delete SBOM, CVE
+	return nil
+}
+
 func (wh *WatchHandler) addToImageIDsMap(imageID string) {
 	wh.imageIDsMapMutex.Lock()
 	defer wh.imageIDsMapMutex.Unlock()
